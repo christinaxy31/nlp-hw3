@@ -33,6 +33,7 @@ def example_transform(example):
 # something called synsets (which stands for synonymous words) and for each of them, lemmas() should give you a possible synonym word.
 # You can randomly select each word with some fixed probability to replace by a synonym.
 
+nltk.download('wordnet')
 
 def custom_transform(example):
     ################################
@@ -44,7 +45,58 @@ def custom_transform(example):
 
     # You should update example["text"] using your transformation
 
-    raise NotImplementedError
+    qwerty_neighbors = {
+    'a': 'qws', 'b': 'vgn', 'c': 'xdfv', 'd': 'ersfcx', 'e': 'wsdr', 'f': 'rtgvc', 
+    'g': 'ftyhbv', 'h': 'gyujnb', 'i': 'ujko', 'j': 'huikmn', 'k': 'jiolm', 
+    'l': 'kop', 'm': 'njk', 'n': 'bhjm', 'o': 'iklp', 'p': 'ol', 'q': 'wa', 
+    'r': 'edft', 's': 'awedz', 't': 'rfgy', 'u': 'yhji', 'v': 'cfgb', 'w': 'qase', 
+    'x': 'zsdc', 'y': 'tghu', 'z': 'asx'
+    }
+
+
+    def introduce_typos(word):
+        if len(word) < 2 or random.random() > 0.5:
+            return word
+        # ifelse, then replace
+        char_idx = random.randint(0, len(word) - 1）
+        char = word[char_idx]
+
+        if char in qwerty_neighbors:
+            new_char = random.choice(qwerty_neighbors[char])
+            word = word[:char_idx] + new_char + word[char_idx + 1:]
+
+        return word
+
+    def replace_with_synonym(word):
+        synonym = set()
+        for syn in wordnet.synsets(word):
+            for lemma in syn.lemmas():
+                synonym = lemma.name().replace('_', ' ')
+                if synonym.lower() != word.lower():
+                    synonyms.add(synonym)
+        if synonyms:
+            return random.choice(list(synonyms))
+        return word
+
+    words = example["text"].split()
+    transformed_words = []
+
+    for word in words:
+        if random.random() < 0.1:
+            word = introduce_typos(word)
+
+        if random.random() < 0,1 and wordnet.synsets(word):
+            word = replace_with_synonym(word)
+
+        transformed_words.append(word)
+
+    transformed_sentence = ' .join(transformed_words)
+
+    example["text"] = transformed_sentence
+    return example
+    
+
+    
 
     ##### YOUR CODE ENDS HERE ######
 
