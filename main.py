@@ -30,7 +30,7 @@ def tokenize_function(examples):
 def do_train(args, model, train_dataloader, save_dir="./out"):
     optimizer = AdamW(model.parameters(), lr=args.learning_rate)
     num_epochs = args.num_epochs
-    num_training_steps = num_epochs * len(train_dataloader)
+    num_training_steps = num_epochs * len(train_dataloader)  #one step train one batch. len(train_dataloader) = num of iterations/batches. one batch=one step=one iteration=one forward, one backward, one update
     lr_scheduler = get_scheduler(
         name="linear", optimizer=optimizer, num_warmup_steps=0, num_training_steps=num_training_steps
     )
@@ -39,7 +39,27 @@ def do_train(args, model, train_dataloader, save_dir="./out"):
 
     ################################
     ##### YOUR CODE BEGINGS HERE ###
+    for epoch in range(num_epochs):
+        for batch in train_dataloader:
+            batch = {k: v.to(device) for k, v in batch.items()}
 
+            #forward
+            outputs = model(**batch)
+            loss = outputs.loss
+            #backward
+            loss.backward()
+            #update
+            optimizer.step()
+            lr_scheduler.step()
+            optimizer.zero_grad()
+
+            progress_bar.update()
+            progress_bar.set_postfix(loss=loss.item())
+        print(f"Epoch {epoch+1}/{num_epochs} completed. Loss:{loss.item()}")
+    
+    
+
+    
     # Implement the training loop --- make sure to use the optimizer and lr_sceduler (learning rate scheduler)
     # Remember that pytorch uses gradient accumumlation so you need to use zero_grad (https://pytorch.org/tutorials/recipes/recipes/zeroing_out_gradients.html)
     # You can use progress_bar.update(1) to see the progress during training
