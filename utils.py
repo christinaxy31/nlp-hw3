@@ -90,7 +90,7 @@ def custom_transform(example):
 
         transformed_words.append(word)
 
-    transformed_sentence = ' .join(transformed_words)
+    transformed_sentence =''.join(transformed_words)
 
     example["text"] = transformed_sentence
   
