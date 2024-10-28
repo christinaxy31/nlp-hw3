@@ -69,7 +69,7 @@ def custom_transform(example):
         return word
 
     def replace_with_synonym(word):
-        synonym = set()
+        synonyms = set()
         for syn in wordnet.synsets(word):
             for lemma in syn.lemmas():
                 synonym = lemma.name().replace('_', ' ')
