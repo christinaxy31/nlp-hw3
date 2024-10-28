@@ -85,7 +85,7 @@ def custom_transform(example):
         if random.random() < 0.1:
             word = introduce_typos(word)
 
-        if random.random() < 0,1 and wordnet.synsets(word):
+        if random.random() < 0.1 and wordnet.synsets(word):
             word = replace_with_synonym(word)
 
         transformed_words.append(word)
