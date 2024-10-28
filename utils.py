@@ -58,7 +58,7 @@ def custom_transform(example):
         if len(word) < 2 or random.random() > 0.5:
             return word
         # ifelse, then replace
-        char_idx = random.randint(0, len(word) - 1）
+        char_idx = random.randint(0, len(word) - 1)
         char = word[char_idx]
 
         if char in qwerty_neighbors:
