@@ -118,7 +118,10 @@ def create_augmented_dataloader(args, dataset):
     random.seed(42)
     selected_examples = train_dataset.shuffle(seed=42).select(range(5000))
     transformed_examples = selected_examples.map(custom_transform, load_from_cache_file = False)
-    combined_dataset = train_dataset.concatenate(transformed_examples)
+    
+    # Concatenate the transformed examples back with the original training set
+    combined_dataset = concatenate_datasets([train_dataset, transformed_examples])
+
 
     tokenized_combined_dataset = combined_dataset.map(tokenize_function, batched=True, load_from_cache_file=False)
     tokenized_combined_dataset = tokenized_combined_dataset.remove_columns(["text"])
