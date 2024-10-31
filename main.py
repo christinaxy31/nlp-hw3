@@ -129,7 +129,7 @@ def create_augmented_dataloader(args, dataset):
     tokenized_combined_dataset = tokenized_combined_dataset.rename_column("label", "labels")
     tokenized_combined_dataset.set_format("torch")
 
-    train_dataloader = DataLoader(tokenized_combined_dataset["train"], shuffle=True, batch_size=args.batch_size)
+    train_dataloader = DataLoader(tokenized_combined_dataset, shuffle=True, batch_size=args.batch_size)
 
 
     ##### YOUR CODE ENDS HERE ######
