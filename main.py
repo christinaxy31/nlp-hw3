@@ -124,7 +124,7 @@ def create_augmented_dataloader(args, dataset):
     combined_dataset = concatenate_datasets([train_dataset, transformed_examples])
 
 
-    tokenized_combined_dataset = combined_dataset.map(tokenize_function, batched=True, load_from_cache_file=False)
+    tokenized_combined_dataset = combined_dataset.map(tokenize_function, batched=True)
     tokenized_combined_dataset = tokenized_combined_dataset.remove_columns(["text"])
     tokenized_combined_dataset = tokenized_combined_dataset.rename_column("label", "labels")
     tokenized_combined_dataset.set_format("torch")
@@ -195,7 +195,7 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 
     # Tokenize the dataset
-    dataset = load_dataset("imdb",download_mode="force_redownload",ignore_verifications=True)
+    dataset = load_dataset("imdb")
     tokenized_dataset = dataset.map(tokenize_function, batched=True)
 
     # Prepare dataset for use by model
